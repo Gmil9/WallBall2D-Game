@@ -8,6 +8,7 @@ public class Projectile : ScriptableObject {
     [SerializeField] GameObject weapon;
     public Transform spawnPosition;
     [SerializeField] int damage;
+    [SerializeField] float rotation;
 
     public GameObject GetWeapon(){
         return weapon;
@@ -15,6 +16,10 @@ public class Projectile : ScriptableObject {
 
     public int GetDamage(){
         return damage;
+    }
+
+    public float GetAngVelocity(){
+        return rotation;
     }
 
 }

@@ -7,14 +7,6 @@ public class ProjectileController : MonoBehaviour {
     Wall wall;
     public float force;
 
-	void Start () {
-        
-	}
-	
-	void Update () {
-       
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //need to check if it hits wall
@@ -24,6 +16,7 @@ public class ProjectileController : MonoBehaviour {
             force -= wall.GetHealth();
             if(force <= 0){
                 gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+                gameObject.GetComponent<Rigidbody2D>().angularVelocity = 0;
                 gameObject.GetComponent<Rigidbody2D>().gravityScale = 1;
             }
             else{ //force must be greater than 0, which means it can continue to the next wall

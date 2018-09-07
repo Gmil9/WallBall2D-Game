@@ -13,9 +13,10 @@ public class GameController : MonoBehaviour {
     [SerializeField] GameObject panel;
 
     ProjectileController pc;
-
+    Rigidbody2D rb;
     GameObject projectile;
     float force;
+    float avelocity;
 
     [SerializeField] Text currencyText;
     int currency = 0;
@@ -48,7 +49,9 @@ public class GameController : MonoBehaviour {
 
     void spawnProjectile(){
         var projectilePrefab = weaponInUse.GetWeapon();
+        avelocity = weaponInUse.GetAngVelocity();
         projectile = Instantiate(projectilePrefab);
+        rb = projectile.GetComponent<Rigidbody2D>();
         projectile.transform.position = weaponInUse.spawnPosition.position;
         pc = projectile.GetComponent<ProjectileController>();
     }
@@ -68,8 +71,8 @@ public class GameController : MonoBehaviour {
     void shootProjectile()
     {
         //move projectile positive x times speed which is equivalent to damage
-        projectile.GetComponent<Rigidbody2D>().velocity = projectile.transform.up * force;
-
+        rb.velocity = projectile.transform.right * force;
+        rb.angularVelocity = avelocity;
     }
 
     public void levelOverPanel(){

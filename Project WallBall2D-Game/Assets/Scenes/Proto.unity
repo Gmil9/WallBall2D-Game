@@ -636,7 +636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dec4feb07e7d445eae56ff150f1a654, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponInUse: {fileID: 11400000, guid: 3f0614867dfc548008744c61d0cd2bcf, type: 2}
+  weaponInUse: {fileID: 11400000, guid: 8e67c23dd6b194366ac5a3ad6b0901cc, type: 2}
   walls:
   - {fileID: 1441959896624962, guid: 5acfa1cb9332b436a8d9b80a8c2a5c35, type: 2}
   - {fileID: 1441959896624962, guid: 5acfa1cb9332b436a8d9b80a8c2a5c35, type: 2}

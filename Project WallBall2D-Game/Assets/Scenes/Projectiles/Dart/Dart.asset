@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbab247309dda4199b52dc9c69b85530, type: 3}
-  m_Name: Knife
+  m_Name: Dart
   m_EditorClassIdentifier: 
   weapon: {fileID: 1213703939144566, guid: a5da5cb5ce2f24b8a8cc312d5cc6510a, type: 2}
   spawnPosition: {fileID: 4974152052403626, guid: 5a37c376b7cb44c02ad92a5bfa12cb0d,
