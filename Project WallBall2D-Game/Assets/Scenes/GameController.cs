@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour {
     [SerializeField] GameObject[] walls;
 
     [SerializeField] Transform firstWall;
+    float test;
 
     [SerializeField] GameObject panel;
 
