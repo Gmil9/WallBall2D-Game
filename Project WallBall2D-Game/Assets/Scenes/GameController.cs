@@ -9,7 +9,6 @@ public class GameController : MonoBehaviour {
     [SerializeField] GameObject[] walls;
 
     [SerializeField] Transform firstWall;
-    float test;
 
     [SerializeField] GameObject panel;
 
@@ -18,14 +17,18 @@ public class GameController : MonoBehaviour {
     GameObject projectile;
     float force;
 
+    [SerializeField] Text currencyText;
+    int currency = 0;
+
 	void Start () {
+        currencyText.text = "$ " + PlayerPrefs.GetInt("currency", 0).ToString();
         spawnProjectile();
         spawnWalls();
     }
 	
 	void Update () {
         force = weaponInUse.GetDamage() + (Mathf.PingPong(Time.time, 1) + 1); //TODO alter this
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("space") && panel.activeSelf == false)
         {
             shootProjectile();
             SetForce();
@@ -35,6 +38,12 @@ public class GameController : MonoBehaviour {
         {
             panel.SetActive(true);
         }
+
+        //if (Input.GetKeyDown("r"))
+        //{
+        //    PlayerPrefs.DeleteAll();
+        //    print("Score Reset");
+        //}
     }
 
     void spawnProjectile(){
@@ -64,6 +73,7 @@ public class GameController : MonoBehaviour {
     }
 
     public void levelOverPanel(){
+        currencyText.text = "$ " + PlayerPrefs.GetInt("currency").ToString();
         Destroy(projectile);
         spawnProjectile();
         spawnWalls();

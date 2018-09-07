@@ -34,6 +34,7 @@ public class ProjectileController : MonoBehaviour {
 
     void destroyWall(GameObject currentWall)
     {
+        PlayerPrefs.SetInt("currency", PlayerPrefs.GetInt("currency") + currentWall.GetComponent<Wall>().GetHealth());
         //destroys wall object
         Destroy(currentWall);
         //spawns wall broken object which has rigidbody and falls to ground
