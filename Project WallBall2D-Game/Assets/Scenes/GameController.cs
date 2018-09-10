@@ -6,9 +6,12 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour {
 
     [SerializeField] Projectile weaponInUse;
-    [SerializeField] GameObject[] walls;
-    [SerializeField] Transform[] wallPositions;
+
+    [SerializeField] GameObject[] possibleWalls;
+    public List<GameObject> currentWalls;
     [SerializeField] Transform WallOrigin;
+    [SerializeField] Transform firstWall;
+
     [SerializeField] float speed = 3;
 
     ProjectileController pc;
@@ -38,13 +41,14 @@ public class GameController : MonoBehaviour {
                  
         if (projectile.transform.position.y < -5f || projectile.transform.position.x > 13f)
         {
-
             currencyText.text = "$ " + PlayerPrefs.GetInt("currency").ToString();
             Destroy(projectile);
             spawnProjectile();
-        }
-
-        if(Input.GetKeyDown("s")){
+            if(currentWalls.Count != 0){
+                foreach(GameObject wall in currentWalls){
+                    StartCoroutine(moveWall(wall));
+                }
+            }
             spawnWalls();
         }
 
@@ -66,13 +70,24 @@ public class GameController : MonoBehaviour {
     }
 
     void spawnWalls(){
-        for (int i = 0; i < walls.Length; i++){
-            var wallPrefab = walls[i];
+        int temp = currentWalls.Count;
+        for (int i = 0; i < (4 - temp); i++){
+            var wallPrefab = possibleWalls[Random.Range(0, possibleWalls.Length)]; 
             var thisWall = Instantiate(wallPrefab);
-            while(thisWall.transform.position.x > wallPositions[i].position.x){
-                thisWall.transform.Translate(Vector3.left * Time.deltaTime * speed);
-            }
+            currentWalls.Add(thisWall);
+            thisWall.transform.position = new Vector3(WallOrigin.position.x + (i * 2),0,WallOrigin.position.z);
+            StartCoroutine(moveWall(thisWall));
         }
+    }
+
+    IEnumerator moveWall(GameObject wall){
+        Rigidbody2D rbWall = wall.GetComponent<Rigidbody2D>();
+        Vector3 pos = new Vector3(firstWall.position.x + (currentWalls.IndexOf(wall) * 2), 0, firstWall.position.z);
+
+        rbWall.velocity = Vector3.left * speed;
+
+        yield return new WaitUntil(() => wall.transform.position.x <= pos.x);
+        rbWall.velocity = Vector3.zero;
     }
 
     void SetForce(){

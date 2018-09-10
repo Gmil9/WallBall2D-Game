@@ -5,8 +5,14 @@ using UnityEngine.UI;
 
 public class ProjectileController : MonoBehaviour {
 
+    GameController gc;
     Wall wall;
     public float force;
+
+    private void Start()
+    {
+        gc = Camera.main.GetComponent<GameController>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -21,6 +27,8 @@ public class ProjectileController : MonoBehaviour {
                 gameObject.GetComponent<Rigidbody2D>().gravityScale = 1;
             }
             else{ //force must be greater than 0, which means it can continue to the next wall
+                //remove collision from list
+                gc.currentWalls.Remove(collision.gameObject);
                 destroyWall(collision.gameObject);
             }
         }
