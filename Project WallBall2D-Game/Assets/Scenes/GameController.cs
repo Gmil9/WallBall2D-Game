@@ -7,16 +7,17 @@ public class GameController : MonoBehaviour {
 
     [SerializeField] Projectile weaponInUse;
     [SerializeField] GameObject[] walls;
-
-    [SerializeField] Transform firstWall;
-
-    [SerializeField] GameObject panel;
+    [SerializeField] Transform[] wallPositions;
+    [SerializeField] Transform WallOrigin;
+    [SerializeField] float speed = 3;
 
     ProjectileController pc;
     Rigidbody2D rb;
     GameObject projectile;
     float force;
     float avelocity;
+
+    bool projectileIsSpawned = false;
 
     [SerializeField] Text currencyText;
     int currency = 0;
@@ -29,15 +30,22 @@ public class GameController : MonoBehaviour {
 	
 	void Update () {
         force = weaponInUse.GetDamage() + (Mathf.PingPong(Time.time, 1) + 1); //TODO alter this
-        if (Input.GetKeyDown("space") && panel.activeSelf == false)
+        if (Input.GetKeyDown("space") && projectileIsSpawned)
         {
             shootProjectile();
             SetForce();
         }
-
-        if(projectile.transform.position.y < -2f || projectile.transform.position.x > 11f)
+                 
+        if (projectile.transform.position.y < -5f || projectile.transform.position.x > 13f)
         {
-            panel.SetActive(true);
+
+            currencyText.text = "$ " + PlayerPrefs.GetInt("currency").ToString();
+            Destroy(projectile);
+            spawnProjectile();
+        }
+
+        if(Input.GetKeyDown("s")){
+            spawnWalls();
         }
 
         //if (Input.GetKeyDown("r"))
@@ -48,6 +56,7 @@ public class GameController : MonoBehaviour {
     }
 
     void spawnProjectile(){
+        projectileIsSpawned = true;
         var projectilePrefab = weaponInUse.GetWeapon();
         avelocity = weaponInUse.GetAngVelocity();
         projectile = Instantiate(projectilePrefab);
@@ -60,7 +69,9 @@ public class GameController : MonoBehaviour {
         for (int i = 0; i < walls.Length; i++){
             var wallPrefab = walls[i];
             var thisWall = Instantiate(wallPrefab);
-            thisWall.transform.position = new Vector3(firstWall.transform.position.x + (i * 2), firstWall.transform.position.y, firstWall.transform.position.z);
+            while(thisWall.transform.position.x > wallPositions[i].position.x){
+                thisWall.transform.Translate(Vector3.left * Time.deltaTime * speed);
+            }
         }
     }
 
@@ -70,17 +81,16 @@ public class GameController : MonoBehaviour {
 
     void shootProjectile()
     {
+        projectileIsSpawned = false;
         //move projectile positive x times speed which is equivalent to damage
         rb.velocity = projectile.transform.right * force;
         rb.angularVelocity = avelocity;
     }
 
-    public void levelOverPanel(){
-        currencyText.text = "$ " + PlayerPrefs.GetInt("currency").ToString();
+    public void changeWeapon(Projectile newWeapon){
         Destroy(projectile);
+        weaponInUse = newWeapon;
         spawnProjectile();
-        spawnWalls();
-        panel.SetActive(false);
     }
 
 }
