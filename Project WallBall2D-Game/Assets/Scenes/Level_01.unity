@@ -609,8 +609,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponInUse: {fileID: 11400000, guid: 8e67c23dd6b194366ac5a3ad6b0901cc, type: 2}
   possibleWalls:
-  - {fileID: 1441959896624962, guid: 5acfa1cb9332b436a8d9b80a8c2a5c35, type: 2}
-  - {fileID: 1441959896624962, guid: 021b4ae6986a942f19926309d602dd86, type: 2}
+  - {fileID: 1324275790050906, guid: d631f5e6e63d0490084cf8805dbedfc1, type: 2}
   currentWalls: []
   WallOrigin: {fileID: 4706854498841310, guid: be3610a3b164b4b899b71b2e73d1c13e, type: 2}
   firstWall: {fileID: 4898280403834440, guid: ef3a00a131bdc47dea1d268b403387a9, type: 2}

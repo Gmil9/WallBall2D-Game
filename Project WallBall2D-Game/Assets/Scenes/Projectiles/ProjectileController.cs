@@ -30,6 +30,20 @@ public class ProjectileController : MonoBehaviour {
                 //remove collision from list
                 gc.currentWalls.Remove(collision.gameObject);
                 destroyWall(collision.gameObject);
+                GameObject broken = (GameObject) Instantiate(wall.GetBrokenWall(), transform.position, Quaternion.identity);
+                var count = 0;
+                foreach(Transform child in broken.transform){
+                    count++;
+                    if(count == 1){
+                        child.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-2f, 0f), -0.25f);
+                        child.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-100, -10);
+                    }
+                    else{
+                        child.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-2f, 0f), Random.Range(4, 2));
+                        child.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(100, 10);
+                    }
+                   
+                }
             }
         }
     }
