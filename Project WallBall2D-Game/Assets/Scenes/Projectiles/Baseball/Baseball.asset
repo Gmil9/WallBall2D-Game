@@ -14,5 +14,7 @@ MonoBehaviour:
   weapon: {fileID: 1213703939144566, guid: 08927be84c10c4d66a0974bc52f1a043, type: 2}
   spawnPosition: {fileID: 4974152052403626, guid: 903dcd663317544af9d05ab2a56b86f4,
     type: 2}
-  damage: 20
+  damage: 50
   rotation: -300
+  isUnlocked: 1
+  price: 0

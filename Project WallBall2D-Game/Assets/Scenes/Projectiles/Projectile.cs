@@ -10,6 +10,9 @@ public class Projectile : ScriptableObject {
     [SerializeField] int damage;
     [SerializeField] float rotation;
 
+    public bool isUnlocked = false;
+    public int price;
+
     public GameObject GetWeapon(){
         return weapon;
     }
@@ -20,6 +23,11 @@ public class Projectile : ScriptableObject {
 
     public float GetAngVelocity(){
         return rotation;
+    }
+
+    public int GetPrice()
+    {
+        return price;
     }
 
 }

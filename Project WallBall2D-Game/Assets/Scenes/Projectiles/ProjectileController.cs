@@ -30,30 +30,34 @@ public class ProjectileController : MonoBehaviour {
                 //remove collision from list
                 gc.currentWalls.Remove(collision.gameObject);
                 destroyWall(collision.gameObject);
-                GameObject broken = (GameObject) Instantiate(wall.GetBrokenWall(), transform.position, Quaternion.identity);
+                GameObject broken = (GameObject) Instantiate(wall.GetBrokenWall(), wall.transform.position, Quaternion.identity);
                 var count = 0;
                 foreach(Transform child in broken.transform){
                     count++;
                     if(count == 1){
                         child.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-2f, 0f), -0.25f);
-                        child.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-100, -10);
+                        child.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-150, -50);
                     }
                     else{
                         child.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-2f, 0f), Random.Range(4, 2));
-                        child.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(100, 10);
+                        child.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(150, 50);
                     }
-                   
                 }
+                StartCoroutine(killWall(broken));
+
             }
         }
+    }
+
+    IEnumerator killWall(GameObject thiswall)
+    {
+        yield return new WaitForSeconds(1.5f);
+        Destroy(thiswall);
     }
 
     void destroyWall(GameObject currentWall)
     {
         PlayerPrefs.SetInt("currency", PlayerPrefs.GetInt("currency") + currentWall.GetComponent<Wall>().GetHealth());
-        //destroys wall object
         Destroy(currentWall);
-        //spawns wall broken object which has rigidbody and falls to ground
-        //make it one layer behind projectile
     }
 }

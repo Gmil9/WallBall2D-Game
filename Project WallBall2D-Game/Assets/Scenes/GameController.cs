@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -21,7 +22,11 @@ public class GameController : MonoBehaviour {
     float avelocity;
 
     bool projectileIsSpawned = false;
+    bool canShoot = false;
 
+    [SerializeField] GameObject nextLevelPanel;
+    [SerializeField] Button buyWeaponButton;
+    Projectile purchaseWeapon;
     [SerializeField] Text currencyText;
     int currency = 0;
 
@@ -32,14 +37,15 @@ public class GameController : MonoBehaviour {
     }
 	
 	void Update () {
-        force = weaponInUse.GetDamage() + (Mathf.PingPong(Time.time, 1) + 1); //TODO alter this
+        force = weaponInUse.GetDamage() + (Mathf.PingPong(Time.time, 1) + 2); //TODO alter this
+        currency = PlayerPrefs.GetInt("currency");
         if (Input.GetKeyDown("space") && projectileIsSpawned)
         {
             shootProjectile();
             SetForce();
         }
                  
-        if (projectile.transform.position.y < -5f || projectile.transform.position.x > 13f)
+        if (projectile.transform.position.y < -15f || projectile.transform.position.x > 20f)
         {
             currencyText.text = "$ " + PlayerPrefs.GetInt("currency").ToString();
             Destroy(projectile);
@@ -48,15 +54,18 @@ public class GameController : MonoBehaviour {
                 foreach(GameObject wall in currentWalls){
                     StartCoroutine(moveWall(wall));
                 }
+                spawnWalls();
             }
-            spawnWalls();
+            else{
+                nextLevelPanel.SetActive(true);
+            }
         }
 
-        //if (Input.GetKeyDown("r"))
-        //{
-        //    PlayerPrefs.DeleteAll();
-        //    print("Score Reset");
-        //}
+        if (Input.GetKeyDown("r"))
+        {
+            PlayerPrefs.DeleteAll();
+            print("Score Reset");
+        }
     }
 
     void spawnProjectile(){
@@ -97,15 +106,49 @@ public class GameController : MonoBehaviour {
     void shootProjectile()
     {
         projectileIsSpawned = false;
+        canShoot = false;
         //move projectile positive x times speed which is equivalent to damage
         rb.velocity = projectile.transform.right * force;
         rb.angularVelocity = avelocity;
     }
 
     public void changeWeapon(Projectile newWeapon){
-        Destroy(projectile);
-        weaponInUse = newWeapon;
-        spawnProjectile();
+        Button thisButton = GameObject.Find(newWeapon.name).GetComponent<Button>();
+        print("here");
+        print(currency);
+        print(newWeapon.GetPrice());
+        if (newWeapon.isUnlocked){
+            print("here 2");
+            Destroy(projectile);
+            weaponInUse = newWeapon;
+            spawnProjectile();
+        }else if (currency > newWeapon.GetPrice()){
+            print("here 3");
+            purchaseWeapon = newWeapon;
+            buyWeaponButton.transform.position = new Vector3(thisButton.transform.position.x, thisButton.transform.position.y - 90, thisButton.transform.position.z);
+            buyWeaponButton.gameObject.SetActive(true);
+        }else{
+            print("here 4");
+            //show you dont have enough moneey text
+        }
     }
 
+    public void buyWeapon(){
+        currency -= purchaseWeapon.GetPrice();
+        purchaseWeapon.isUnlocked = true;
+        buyWeaponButton.gameObject.SetActive(false);
+    }
+
+    public void nextScene(string answer){
+        if(answer == "yes"){
+            var s = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(s + 1);
+            nextLevelPanel.SetActive(false);
+        }
+        else
+        {
+            nextLevelPanel.SetActive(false);
+            spawnWalls();
+        }
+    }
 }
